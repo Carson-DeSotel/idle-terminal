@@ -3,81 +3,85 @@
 #include "lib/screen.h"
 #include "lib/color.h"
 #include "lib/cursor.h"
+#include "lib/util.h"
 
-#define BORDER_HEIGHT 10
-#define BORDER_WIDTH  25
+// change the amount of sleep time per cycle
+// to change increment
+
+#define BAR_SIZE 25
+#define MAX_PERCENT 100
 #define BLOCK "\u2588"
-#define BG_COLOR BG_BLUE
+#define LIGHT_SHADE "\u2591"
 
-void print_border() {
-  for(int i = 0; i < BORDER_HEIGHT; i += 1) {
-    change_bg(BG_COLOR);
-    for(int j = 0; j < BORDER_WIDTH; j += 1) {
-      if(i == 0 || i == BORDER_HEIGHT - 1) {
-        printf(BLOCK);
-      } else if((j == 0 || j == BORDER_WIDTH - 1)) {
-        printf(BLOCK);
-      } else {
-        printf(" ");
-      }
+void print_closing() {
+  printf("\rClosing in...\r");
+  fflush(stdout);
+  sleep(1);
+  change_fg(FG_RED);
+  for(int i = 3; i > 0; i -= 1) {
+    clear(LINE);
+    printf("%d...\r", i);
+    fflush(stdout);
+    sleep(1);
+  }
+  color_clear();
+  printf("Goodbye!\r");
+  fflush(stdout);
+  sleep(1);
+}
+
+void print_progress(double p) {
+  for(int i = 1; i <= BAR_SIZE; i += 1) {
+    // compare p as percentage of BAR_SIZE
+    if(p * BAR_SIZE >= i) {
+      printf(BLOCK);
+    } else {
+      printf(LIGHT_SHADE);
     }
-    change_bg(RESET);
+  }
+  printf("\t%.2f%%", p * 100);
+}
+
+void game(int max_round) {
+  const int ROUND_TEXT_OFFSET = 13;
+  for(int round = 1; round <= max_round; round += 1) {
+    cursor_XY(1, round);
+    printf("[ lvl %3d ] ", round);
+    for(int p = 1; p <= MAX_PERCENT * round; p += 1) {
+      cursor_XY(ROUND_TEXT_OFFSET, round);
+      print_progress( (p / (100.0 * round) ) );
+      fflush(stdout);
+      usleep(25000);
+    }
     printf("\n");
   }
 }
 
-void print_progress(int p) {
-  int bar_size = BORDER_WIDTH - 4;
-
-  change_bg(BG_COLOR);
-  cursor_save();
-  cursor_XY(2,2);
-  printf("[");
-  for(int j = 0; j < bar_size; j += 1) {
-    if(j <= p){ printf("#"); }
-    else      { printf("-"); }
-  }
-  printf("]");
-  cursor_load();
-  change_bg(RESET);
-}
-
-void print_loading(int p) {
-  p *= 5;
-  change_bg(BG_COLOR);
-  change_fg(FG_BLACK);
-  cursor_save();
-  cursor_XY(5,5);
-  printf("Now loading...%d%%", p);
-  cursor_load();
-  change_bg(RESET);
-}
-
-void print_finished() {
-  change_bg(BG_COLOR);
-  change_fg(FG_BLACK);
-  cursor_save();
-  cursor_XY(9,5);
-  printf("Finished!");
-  cursor_load();
-  change_bg(RESET);
-}
-
 int main(int argc, char* argv[]) {
-  for(int i = 1; i <= 21; i += 1) {
-    clear(ENTIRE_SCREEN);
-    print_border();
-    print_progress(i);
+  char c;
+  hard_reset();
 
-    if(i != 21) {
-      print_loading(i);
-    } else {
-      print_finished();
+  if(argc < 2) {
+    printf("This program uses a file to save user data...\n");
+    printf("A filename was not given for the user data...\n");
+    printf("If you create a new file, it will overwrite a file of the same name...\n");
+    printf("Would you like to make a new file? (y/n) \n");
+    scanf(" %c", &c);
+    if(c == 'y' || c == 'Y') {
+      printf("Positive? (y/n) \n");
+      scanf(" %c", &c);
+      if(c == 'y' || c == 'Y') {
+        configure_user();
+      }
     }
-
-    fflush(stdout); // needed as no \n or other stream flushers are used.
-    sleep(1);
+    print_closing();
+  } else if (argc > 2) {
+    printf("This program does not take more than one additional argument...\n");
+    printf("Please only input your user filename as an additional argument when running...\n");
+    print_closing();
+  } else {
+    // open the game
   }
 
-  clear(SCREEN);
+  hard_reset();
 }
