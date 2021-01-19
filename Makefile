@@ -5,6 +5,7 @@ SRC_PATH = ./src
 BUILD_PATH = ./build
 EXECUTABLE = main
 OBJECTS = $(addprefix $(BUILD_PATH)/, color.o cursor.o screen.o user.o util.o main.o)
+DATA = user.dat
 
 CFLAGS = -Wall $(INCLUDE_PATH)
 
@@ -24,3 +25,4 @@ build :
 clean :
 	rm -rd $(BUILD_PATH)
 	rm $(EXECUTABLE)
+	rm $(DATA)
