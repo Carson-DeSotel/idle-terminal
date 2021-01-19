@@ -1,18 +1,26 @@
-CC  = gcc 		# compiler
+CC = gcc
 
-LIB = ./lib
-SRCS = ./main.c ./lib/screen.c ./lib/color.c ./lib/cursor.c ./lib/util.c
-OBJS = main.o ./lib/screen.o ./lib/color.o ./lib/cursor.o ./lib/util.o
+INCLUDE_PATH = -I./include
+SRC_PATH = ./src
+BUILD_PATH = ./build
+EXECUTABLE = main
+OBJECTS = $(addprefix $(BUILD_PATH)/, color.o cursor.o screen.o user.o util.o main.o)
 
-deps :
-	make -C ${LIB} all
-	${CC} -c main.c
+CFLAGS = -Wall $(INCLUDE_PATH)
 
-all : ${OBJS}
-	make deps
-	${CC} -o main ${OBJS}
+.PHONY: all
+all : main
 
+main : build $(OBJECTS) 
+	$(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJECTS) 
+
+$(BUILD_PATH)/%.o : $(SRC_PATH)/%.c 
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+build :
+	mkdir -p $(BUILD_PATH)
+
+.PHONY: clean
 clean :
-	make -C ${LIB} clean 
-	rm *.o
-	rm main
+	rm -rd $(BUILD_PATH)
+	rm $(EXECUTABLE)
