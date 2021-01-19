@@ -1,22 +1,28 @@
 # idle-term
 
-The original thought behind this repo was to create some sort of "idle game" that would play in your terminal.
-Examples of idle game's I would mimic include Cookie Clicker, AdVenture Capitalist, and so many more on the App Store (or Google Play Store). 
+a game to play in your terminal with your extra processing power!
 
-Instead of doing that all the way so far, I've instead started work on a graphics library to handle this and have been getting familiar with ANSI escape codes to manipulate color (more experiments in that [here](https://github.com/Carson-DeSotel/terminal-art)) and the cursor position within the terminal. 
+## Description:
+```idle-term``` is a game created to be played passively. It is an incremental (or idle) game that uses executions of the code to increase its progress. 
 
-Also, it was a fun project to attempt while I've got nothing else going on in the week before the new semester starts.
+The goal of this incremental game is the same as all incremental games: to make big numbers. 
+The way it works is by having progress bars appear on screen. The more you execute the code, the more levels you have, the more bars appear on screen. Each bar takes more time to complete than the last creating some sense of "difficulty". 
 
-## Up Next:
-I would like to continue the project. I'm hoping to pick up a few things in a class I'm taking this semester to introduce multithreading into the project as well as better C practices.
+There is a hard cap on levels presently (50). 
 
-I would also greatly enjoy expanding out the library to make it a) more accessible and b) more programmatic. I'm a damn TA, I talk to my students so much about employing good coding practices, but apparently can't introduce them too well on my own.
+## Goals:
+The next few steps of the game call for adding certain flags that will modify the gamestate to allow for such things as:
+  - modifying the color of your progress bars
+  - changing your filename
+  - adding some sort of "encrpytion" system to the save files to make them harder to crack (no cheaters)
+  - adding the ability to run the game infinitely instead of running it after each level beat
+  - removing the cap on levels
+  - [~] adding beat times
+  - [~] randomizing the times to complete a level slightly?
+  - [~] modifiers that change the gamestate for the user?
 
-Yeah...
+NOTE: items marked with ```[~]``` are of less importance. They're currently just ideas for the future.
 
-Some goals would be to:
-  - Implement a way to incrementally gain points, spend those points, and continue to earn upgrades.
-  - Flesh out the graphics library with comments, more functions, better naming conventions.
-  - Rework the build system (consider adding a separate build directory)
-
-Let's see if I can finish this off a bit more. If not, I still believe that this stands as a pretty decent representation of what I could accomplish. 
+## Open Source:
+This project is open source for a reason. If you want to modify it, please do, just submit a pull request for my review.
+So long as you don't sell it for monetary gain, feel free to use this software as you see fit.
