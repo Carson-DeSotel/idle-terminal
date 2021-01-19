@@ -45,7 +45,10 @@ void print_progress(double p) {
   printf("\t%.2f%%", p * 100);
 }
 
-void game(int max_round) {
+void game(struct user player) {
+  int max_round = player.max_level;
+  change_fg(player.fg_color);
+
   const int ROUND_TEXT_OFFSET = 13;
   for(int round = 1; round <= max_round; round += 1) {
     cursor_XY(1, round);
@@ -58,10 +61,15 @@ void game(int max_round) {
     }
     printf("\n");
   }
+
+  player.max_level += 1;
+  user_to_file(player);
 }
 
 int main(int argc, char* argv[]) {
   char c;
+  struct user player;
+
   hard_reset();
 
   if(argc < 2) {
@@ -74,16 +82,24 @@ int main(int argc, char* argv[]) {
       printf("Positive? (y/n) \n");
       scanf(" %c", &c);
       if(c == 'y' || c == 'Y') {
-        configure_user();
+        player = user_init();
+        user_to_file(player);
+        clear(ENTIRE_SCREEN);
+        game(player);
+      } else {
+        print_closing();
       }
+    } else {
+      print_closing();
     }
-    print_closing();
   } else if (argc > 2) {
     printf("This program does not take more than one additional argument...\n");
     printf("Please only input your user filename as an additional argument when running...\n");
     print_closing();
   } else {
-    // open the game
+    char* filename = argv[1];
+    player = user_from_file(filename);
+    game(player);
   }
 
   hard_reset();
