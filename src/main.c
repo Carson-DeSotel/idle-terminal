@@ -6,11 +6,6 @@
 #include "../include/user.h"
 #include "../include/util.h"
 
-
-
-// change the amount of sleep time per cycle
-// to change increment
-
 #define BAR_SIZE 25
 #define MAX_PERCENT 100
 #define BLOCK "\u2588"
