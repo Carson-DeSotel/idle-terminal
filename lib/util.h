@@ -1,1 +1,0 @@
-void hard_reset();
