@@ -43,8 +43,27 @@ void ts_println(struct termstyle_t *ts, char *msg){
 }
 
 void ts_clear(struct termstyle_t *ts){
-  // \033[H  : return to (H)ome cursor position
   // \033[2J : clear entire screen
-  
-  write(ts->fd, "\033[H\033[2J", 8);
+  cursor_set_home(ts);
+  write(ts->fd, "\033[2J", 4);
+}
+
+void cursor_set_xy(struct termstyle_t *ts, int x, int y){
+  // \033[%d;%dH : move cursor to position y, x
+  char buf[MAXSIZE];
+  int res = snprintf(buf, MAXSIZE, "\033[%d;%dH", y, x);
+  write(ts->fd, buf, res);
+}
+
+void cursor_set_home(struct termstyle_t *ts){
+  // \033[H  : return to (H)ome cursor position
+  write(ts->fd, "\033[H", 4);
+}
+
+void cursor_save(struct termstyle_t *ts){
+  write(ts->fd, "\033[s", 4);  
+}
+
+void cursor_load(struct termstyle_t *ts){
+  write(ts->fd, "\033[u", 4);
 }

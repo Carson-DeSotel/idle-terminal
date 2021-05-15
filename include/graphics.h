@@ -44,3 +44,8 @@ void ts_print(struct termstyle_t *ts, char* msg);
 void ts_println(struct termstyle_t *ts, char *msg);
 
 void ts_clear(struct termstyle_t *ts);
+
+void cursor_set_xy(struct termstyle_t *ts, int x, int y);
+void cursor_set_home(struct termstyle_t *ts);
+void cursor_save(struct termstyle_t *ts);
+void cursor_load(struct termstyle_t *ts);
