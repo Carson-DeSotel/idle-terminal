@@ -4,7 +4,7 @@ INCLUDE_PATH = -I./include
 SRC_PATH = ./src
 BUILD_PATH = ./build
 EXECUTABLE = idle-term
-OBJECTS = $(addprefix $(BUILD_PATH)/, idle-term.o bar.o graphics.o menu.o)
+OBJECTS = $(addprefix $(BUILD_PATH)/, idle-term.o bar.o graphics.o menu.o player.o)
 DATA = user.dat
 
 CFLAGS = -Wall $(INCLUDE_PATH)
@@ -13,7 +13,7 @@ CFLAGS = -Wall $(INCLUDE_PATH)
 all : main
 
 main : build $(OBJECTS) 
-	$(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJECTS) 
+	$(CC) $(CFLAGS) -o $(EXECUTABLE) $(OBJECTS) src/headers.h
 
 $(BUILD_PATH)/%.o : $(SRC_PATH)/%.c
 	$(CC) -c $(CFLAGS) -o $@ $<
